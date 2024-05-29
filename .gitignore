@@ -1,0 +1,6 @@
+venv
+service-account-file.json
+output
+audio
+source_*
+__pycache__
