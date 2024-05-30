@@ -1,5 +1,14 @@
 import re
 
+def remove_non_ascii(input_file):
+    with open(input_file, 'r', encoding='utf-8') as file:
+        content = file.read()
+
+    # Remove characters outside the ASCII range
+    cleaned_content = ''.join(char for char in content if ord(char) < 128)
+
+    with open(input_file, 'w', encoding='utf-8') as file:
+        file.write(cleaned_content)
 
 def replace_tabs(input_file):
     try:
@@ -99,4 +108,5 @@ def clean_text(input_file):
     remove_emails_and_html_tags(input_file)
     add_full_stop(input_file)
     remove_blank_lines(input_file)
+    remove_non_ascii(input_file)
 

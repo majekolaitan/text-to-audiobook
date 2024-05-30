@@ -43,7 +43,7 @@ def text_to_audiobook(input_folder, output_folder, language_code, voice_name):
     os.makedirs(output_folder, exist_ok=True)
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        futures = [executor.submit(text_to_speech, input_file, os.path.join(output_folder, f"{os.path.basename(input_file)}.mp3"), language_code, voice_name) for input_file in input_files]
+        futures = [executor.submit(text_to_speech, input_file, os.path.join(output_folder, f"{os.path.splitext(os.path.basename(input_file))[0]}.mp3"), language_code, voice_name) for input_file in input_files]
 
         # tqdm is used to display a progress bar for the audio conversion process
         for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures), desc="Processing files"):

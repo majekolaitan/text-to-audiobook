@@ -21,11 +21,12 @@ if __name__ == "__main__":
     source_file='source_file2.txt'
     source_file_copy='source_file_copy.txt'
     source_file_chunks='source_file_chunks'
-    heading_regex = r'Section.+?(\d+)'
+    heading_regex = r'^Section.+?(\d+)'
+    heading_text = 'Section'
 
-    copy_source(source_file, source_file_copy)
-    clean_text(source_file_copy)
-    fix_bible_ref_pron(source_file_copy)
-    split_text_max_char(source_file_copy, source_file_chunks, 4998)
-    rename_output_files(source_file_chunks, heading_regex)
-    # text_to_audiobook(source_file_chunks, 'audio_output', 'en-US', 'en-US-Studio-O')
+    # copy_source(source_file, source_file_copy)
+    # clean_text(source_file_copy)
+    # fix_bible_ref_pron(source_file_copy)
+    # split_text_max_char(source_file_copy, source_file_chunks, 4998)
+    # rename_output_files(source_file_chunks, heading_regex, heading_text)
+    text_to_audiobook(source_file_chunks, 'audio_output', 'en-US', 'en-US-Studio-O')

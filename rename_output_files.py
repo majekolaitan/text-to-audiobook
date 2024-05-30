@@ -1,10 +1,10 @@
 import os
 import re
 
-def rename_output_files(folder_path, heading_regex):
+def rename_output_files(folder_path, heading_regex, heading_text):
 
     # Regular expression pattern to match the lesson number
-    pattern = re.compile(heading_regex)
+    pattern = re.compile(heading_regex, re.MULTILINE)
     
     # Initialize variables to keep track of last lesson number
     last_lesson_number = 0
@@ -45,7 +45,7 @@ def rename_output_files(folder_path, heading_regex):
             file.close()
                 
             # Rename the file with the captured group
-            new_filename = f"Heading_{str(lesson_number).zfill(2)}_Part_{str(part_number).zfill(2)}.txt"
+            new_filename = f"{heading_text}_{str(lesson_number).zfill(2)}_Part_{str(part_number).zfill(2)}.txt"
             new_file_path = os.path.join(folder_path, new_filename)
                 
             # Attempt to rename the file
