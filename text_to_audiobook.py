@@ -32,7 +32,7 @@ def text_to_speech(input_file, output_audio_file, language_code='en-US', voice_n
     except Exception as e:
         print(f"Error in text-to-speech conversion for {input_file}: {e}")
 
-def process_files_concurrently(input_folder, output_folder, language_code, voice_name):
+def text_to_audiobook(input_folder, output_folder, language_code, voice_name):
     """ Processes all text files in the input folder concurrently using Google's Text-to-Speech API. """
     input_files = [os.path.join(input_folder, f) for f in os.listdir(input_folder) if f.endswith('.txt')]
     if not input_files:

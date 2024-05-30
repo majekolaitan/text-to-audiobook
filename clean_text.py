@@ -1,17 +1,5 @@
 import re
 
-def copy_source(input_file, output_file):
-    try:
-        with open(input_file, 'r') as file:
-            content = file.read()
-
-        with open(output_file, 'w') as file:
-            file.write(content)
-
-        print("Made a copy of source file successfully.")
-    except IOError:
-        print("Error: File not found or cannot be read.")
-
 
 def replace_tabs(input_file):
     try:
@@ -62,8 +50,6 @@ def remove_blank_lines(file_path):
     except IOError:
         print("Error: File not found or cannot be read.")
 
-import re
-
 def remove_emails_and_html_tags(file_path):
     try:
         with open(file_path, 'r') as file:
@@ -106,4 +92,11 @@ def add_full_stop(file_path):
         print("Full stops added successfully.")
     except IOError:
         print("Error: File not found or cannot be read.")
+
+def clean_text(input_file):
+    replace_tabs(input_file)
+    remove_leading_and_trailing_spaces(input_file)
+    remove_emails_and_html_tags(input_file)
+    add_full_stop(input_file)
+    remove_blank_lines(input_file)
 

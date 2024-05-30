@@ -1,6 +1,14 @@
 import os
 
-def delete_files_in_output(output_folder):
+def split_text_max_char(input_file, output_folder, max_chars):
+    """
+    Recursively copy text from an input file to output files in a specified folder.
+    Each output file will contain up to max_chars characters.
+    If the last character is not a sentence-ending punctuation mark, look backward
+    to the nearest such punctuation mark.
+    """
+
+    # Cleanup output folder
     if os.path.exists(output_folder):
         try:
             for filename in os.listdir(output_folder):
@@ -16,13 +24,6 @@ def delete_files_in_output(output_folder):
     else:
         print(f"Cleanup: The director '{output_folder}' does not exist.")
 
-def split_text_max_char(input_file, output_folder, max_chars):
-    """
-    Recursively copy text from an input file to output files in a specified folder.
-    Each output file will contain up to max_chars characters.
-    If the last character is not a sentence-ending punctuation mark, look backward
-    to the nearest such punctuation mark.
-    """
     # Create the output folder if it doesn't exist
     os.makedirs(output_folder, exist_ok=True)
 
@@ -45,7 +46,7 @@ def split_text_max_char(input_file, output_folder, max_chars):
             # Check if the last character is a sentence-ending punctuation mark
             if text[end - 1] in end_punctuation:
                 # Write the text to an output file
-                output_file = os.path.join(output_folder, f'output_{file_count}.txt')
+                output_file = os.path.join(output_folder, f'output_{str(file_count).zfill(2)}.txt')
                 with open(output_file, 'w') as out_file:
                     file_text = text[start:end]
                     out_file.write(file_text)
@@ -62,7 +63,7 @@ def split_text_max_char(input_file, output_folder, max_chars):
                     end -= 1
 
                 # Write the text up to the found punctuation mark to an output file
-                output_file = os.path.join(output_folder, f'output_{file_count}.txt')
+                output_file = os.path.join(output_folder, f'output_{str(file_count).zfill(2)}.txt')
                 with open(output_file, 'w') as out_file:
                     file_text = text[start:end]
                     out_file.write(file_text)
@@ -78,7 +79,7 @@ def split_text_max_char(input_file, output_folder, max_chars):
             file_count += 1
         else:
             # If the end index is out of bounds, write the remaining text to a file
-            output_file = os.path.join(output_folder, f'output_{file_count}.txt')
+            output_file = os.path.join(output_folder, f'output_{str(file_count).zfill(2)}.txt')
             with open(output_file, 'w') as out_file:
                 file_text = text[start:]
                 out_file.write(file_text)

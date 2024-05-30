@@ -1,53 +1,58 @@
 import os
 import re
-from pathlib import Path
 
-def rename_output_files(output_folder):
+def rename_output_files(folder_path, heading_regex):
 
-    # Get a list of all files in the directory
-    files = os.listdir(output_folder)
+    # Regular expression pattern to match the lesson number
+    pattern = re.compile(heading_regex)
+    
+    # Initialize variables to keep track of last lesson number
+    last_lesson_number = 0
+    last_part_numbers = {}
+    
+    # Loop through all files in the folder
+    for filename in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, filename)
+        
+        # Check if the path is a file
+        if os.path.isfile(file_path):
+            # Open and read the file
+            with open(file_path, 'r') as file:
+                content = file.read()
+                
+                # Find all matches in the content
+                matches = re.findall(pattern, content)
+                
+                # If matches are found, extract the lesson number from the first match
+                if matches:
+                    lesson_number = int(matches[0])
+                else:
+                    # If no match found, use the last lesson number from the previous file
+                    lesson_number = last_lesson_number
+                
+                # Determine the part number for the lesson
+                if lesson_number in last_part_numbers:
+                    last_part_numbers[lesson_number] += 1
+                else:
+                    last_part_numbers[lesson_number] = 1
+                
+                part_number = last_part_numbers[lesson_number]
+                
+                # Update the last lesson number
+                last_lesson_number = lesson_number
+                
+            # Close the file handle
+            file.close()
+                
+            # Rename the file with the captured group
+            new_filename = f"Heading_{str(lesson_number).zfill(2)}_Part_{str(part_number).zfill(2)}.txt"
+            new_file_path = os.path.join(folder_path, new_filename)
+                
+            # Attempt to rename the file
+            try:
+                os.rename(file_path, new_file_path)
+                print(f"Renamed {filename} to {new_filename}")
+            except PermissionError:
+                print(f"Could not rename {filename}. File in use by another process.")
 
-    # Sort the files numerically
-    files.sort(key=lambda x: int(x.split('_')[1].split('.')[0]))
 
-    # Initialize the current_section and part variables
-    current_section = None
-    part_number = 0
-
-    # Loop through each file
-    for filename in files:
-        # Construct the full file path
-        file_path = os.path.join(output_folder, filename)
-
-        # Open the file and read its contents
-        with open(file_path, "r") as f:
-            contents = f.readlines()
-
-        # Flag to track if a section was found in the file
-        section_found = False
-
-        # Loop through each line in the file
-        for line in contents:
-            # Check if the line starts with "Section" followed by a number
-            match = re.match(r"^Section (\d+)", line)
-            if match:
-                section_found = True
-                # Extract the section number
-                section_number = int(match.group(1))
-
-                # Update the current_section variable if necessary
-                if current_section is None or section_number > current_section:
-                    current_section = section_number
-                    current_section_padded = str(current_section).zfill(2)
-                    part_number = 1
-                    print(f"Found Section {current_section_padded} in file {filename}")
-
-        # Rename the file with the section and part number
-        if section_found:
-            new_filename = f"Section {current_section_padded} - Part 1.txt"
-        else:
-            part_number += 1
-            new_filename = f"Section {current_section_padded} - Part {part_number}.txt"
-
-        new_file_path = os.path.join(output_folder, new_filename)
-        os.rename(file_path, new_file_path)
