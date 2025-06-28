@@ -1,6 +1,9 @@
+.venv
 venv
 service-account-file.json
+temporal-web-*.json
 output
+input.txt
 audio_output
 source_*
 __pycache__
